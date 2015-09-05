@@ -315,16 +315,16 @@ QCLContext *QCLKernel::context() const
 /*!
     Returns the OpenCL program that this kernel is associated with.
 */
-QCLProgram QCLKernel::program() const
+QCLProgram* QCLKernel::program() const
 {
     Q_D(const QCLKernel);
     if (!d->id)
-        return QCLProgram();
+        return new QCLProgram();
     cl_program prog = 0;
     if (clGetKernelInfo(d->id, CL_KERNEL_PROGRAM,
                         sizeof(prog), &prog, 0) != CL_SUCCESS)
-        return QCLProgram();
-    return QCLProgram(d->context, prog);
+        return new QCLProgram();
+    return new QCLProgram(d->context, prog);
 }
 
 /*!
@@ -518,7 +518,7 @@ void QCLKernel::setLocalWorkSize(const QCLWorkSize &size)
 */
 QCLWorkSize QCLKernel::bestLocalWorkSizeImage2D() const
 {
-    QList<QCLDevice> devices = program().devices();
+    QList<QCLDevice> devices = program()->devices();
     size_t maxItems = devices.isEmpty() ? 1 : devices.at(0). maximumWorkItemsPerGroup();
     size_t size = 8;
     while (size > 1 && (size * size) > maxItems)
@@ -535,7 +535,7 @@ QCLWorkSize QCLKernel::bestLocalWorkSizeImage2D() const
 */
 QCLWorkSize QCLKernel::bestLocalWorkSizeImage3D() const
 {
-    QList<QCLDevice> devices = program().devices();
+    QList<QCLDevice> devices = program()->devices();
     size_t maxItems = devices.isEmpty() ? 1 : devices.at(0). maximumWorkItemsPerGroup();
     size_t size = 8;
     while (size > 1 && (size * size * size) > maxItems)

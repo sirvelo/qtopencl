@@ -272,24 +272,24 @@ QList<QByteArray> QCLProgram::binaries() const
 
     \sa build()
 */
-QCLKernel QCLProgram::createKernel(const char *name) const
+QCLKernel* QCLProgram::createKernel(const char *name) const
 {
     cl_int error;
     cl_kernel kernel = clCreateKernel(m_id, name, &error);
     if (kernel) {
         context()->setLastError(error);
-        return QCLKernel(m_context, kernel);
+        return new QCLKernel(m_context, kernel);
     }
     context()->setLastError(error);
     qWarning() << "QCLProgram::createKernel(" << name << "):"
                << QCLContext::errorName(error);
-    return QCLKernel();
+    return new QCLKernel();
 }
 
 /*!
     \overload
 */
-QCLKernel QCLProgram::createKernel(const QByteArray &name) const
+QCLKernel* QCLProgram::createKernel(const QByteArray &name) const
 {
     return createKernel(name.constData());
 }
@@ -297,7 +297,7 @@ QCLKernel QCLProgram::createKernel(const QByteArray &name) const
 /*!
     \overload
 */
-QCLKernel QCLProgram::createKernel(const QString &name) const
+QCLKernel* QCLProgram::createKernel(const QString &name) const
 {
     return createKernel(name.toLatin1().constData());
 }
@@ -305,9 +305,9 @@ QCLKernel QCLProgram::createKernel(const QString &name) const
 /*!
     Creates a list of kernels for all of the entry points in this program.
 */
-QList<QCLKernel> QCLProgram::createKernels() const
+QList<QCLKernel*> QCLProgram::createKernels() const
 {
-    QList<QCLKernel> list;
+    QList<QCLKernel*> list;
     cl_uint numKernels = 0;
     if (clCreateKernelsInProgram(m_id, 0, 0, &numKernels) != CL_SUCCESS)
         return list;
@@ -316,7 +316,7 @@ QList<QCLKernel> QCLProgram::createKernels() const
             (m_id, numKernels, kerns.data(), 0) != CL_SUCCESS)
         return list;
     for (cl_uint index = 0; index < numKernels; ++index)
-        list.append(QCLKernel(m_context, kerns[index]));
+        list.append(new QCLKernel(m_context, kerns[index]));
     return list;
 }
 

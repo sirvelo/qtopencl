@@ -89,7 +89,7 @@ public:
     cl_kernel kernelId() const;
     QCLContext *context() const;
 
-    QCLProgram program() const;
+    QCLProgram* program() const;
     QString name() const;
     int argCount() const;
 
