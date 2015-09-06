@@ -148,9 +148,9 @@ void BezierWidget::initializeGL()
         qFatal("Could not create OpenCL context");
 
     program = context.buildProgramFromSourceFile(QLatin1String(":/bezierpatch.cl"));
-    evaluateBezier = program.createKernel("evaluateBezier");
-    if (evaluateBezier.bestLocalWorkSizeImage2D().width() == 8)
-        evaluateBezier.setLocalWorkSize(8, 8);
+    evaluateBezier = program->createKernel("evaluateBezier");
+    if (evaluateBezier->bestLocalWorkSizeImage2D().width() == 8)
+        evaluateBezier->setLocalWorkSize(8, 8);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -249,7 +249,7 @@ void BezierWidget::setUseOpenCL(bool value)
 
 void BezierWidget::setLocalWorkSize(int x, int y)
 {
-    evaluateBezier.setLocalWorkSize(x, y);
+    evaluateBezier->setLocalWorkSize(x, y);
     frameRate.start();
 }
 
@@ -377,8 +377,8 @@ void BezierWidget::computeVerticesCL()
     }
 #endif
 
-    evaluateBezier.setGlobalWorkSize(subdivisionSize, subdivisionSize);
-    evaluateBezier(positionBuffer, texCoordBuffer,
+    evaluateBezier->setGlobalWorkSize(subdivisionSize, subdivisionSize);
+    (*evaluateBezier)(positionBuffer, texCoordBuffer,
                    matrixX, matrixY, matrixZ, subdivisionSize);
 
 #ifdef USE_VBOS
