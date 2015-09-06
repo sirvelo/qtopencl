@@ -77,13 +77,13 @@ BlurWidget::BlurWidget(QWidget *parent)
 //! [4]
 
 //! [5]
-    hgaussian = program.createKernel("hgaussian");
-    hgaussian.setGlobalWorkSize(img.size());
-    hgaussian.setLocalWorkSize(hgaussian.bestLocalWorkSizeImage2D());
+    hgaussian = program->createKernel("hgaussian");
+    hgaussian->setGlobalWorkSize(img.size());
+    hgaussian->setLocalWorkSize(hgaussian->bestLocalWorkSizeImage2D());
 
-    vgaussian = program.createKernel("vgaussian");
-    vgaussian.setGlobalWorkSize(img.size());
-    vgaussian.setLocalWorkSize(vgaussian.bestLocalWorkSizeImage2D());
+    vgaussian = program->createKernel("vgaussian");
+    vgaussian->setGlobalWorkSize(img.size());
+    vgaussian->setLocalWorkSize(vgaussian->bestLocalWorkSizeImage2D());
 //! [5]
 
     QTimer *timer = new QTimer(this);
@@ -108,8 +108,8 @@ void BlurWidget::paintEvent(QPaintEvent *)
 
     // Execute the horizontal and vertical Gaussian kernels.
 //! [7]
-    hgaussian(srcImageBuffer, tmpImageBuffer, weightsBuffer, offsetsBuffer, blurSizes[radius]);
-    vgaussian(tmpImageBuffer, dstImageBuffer, weightsBuffer, offsetsBuffer, blurSizes[radius]);
+    (*hgaussian)(srcImageBuffer, tmpImageBuffer, weightsBuffer, offsetsBuffer, blurSizes[radius]);
+    (*vgaussian)(tmpImageBuffer, dstImageBuffer, weightsBuffer, offsetsBuffer, blurSizes[radius]);
 //! [7]
 
     // Read back the destination image into host memory and draw it.

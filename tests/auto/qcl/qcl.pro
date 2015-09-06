@@ -1,6 +1,6 @@
-load(qttest_p4.prf)
+#load(qttest_p5.prf)
 TEMPLATE=app
-QT += testlib concurrent opencl
+QT += testlib concurrent
 CONFIG += unittest warn_on
 
 SOURCES += tst_qcl.cpp

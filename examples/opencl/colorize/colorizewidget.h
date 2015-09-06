@@ -56,8 +56,8 @@ protected:
 
 private:
     QCLContext context;
-    QCLProgram program;
-    QCLKernel colorize;
+    QCLProgram* program;
+    QCLKernel* colorize;
     QImage dstImage;
     QCLImage2D srcImageBuffer;
     QCLImage2D dstImageBuffer;

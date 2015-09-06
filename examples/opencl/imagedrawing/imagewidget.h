@@ -58,9 +58,9 @@ protected:
 private:
     QCLContext context;
 
-    QCLProgram program;
-    QCLKernel fillRectWithColor;
-    QCLKernel drawImageKernel;
+    QCLProgram* program;
+    QCLKernel* fillRectWithColor;
+    QCLKernel* drawImageKernel;
 
     QCLImage2D flower;
     QCLImage2D bg1;

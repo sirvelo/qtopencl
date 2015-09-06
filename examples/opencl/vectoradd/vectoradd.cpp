@@ -64,25 +64,28 @@ int main(int, char **)
 //! [3]
 
 //! [4]
-    QCLProgram program = context.buildProgramFromSourceFile(":/vectoradd.cl");
-    QCLKernel kernel = program.createKernel("vectorAdd");
+    QCLProgram* program = context.buildProgramFromSourceFile(":/vectoradd.cl");
+    QCLKernel* kernel = program->createKernel("vectorAdd");
 //! [4]
 
 //! [5]
-    kernel.setGlobalWorkSize(2048);
+    kernel->setGlobalWorkSize(2048);
 //! [5]
 //! [6]
-    kernel(input1, input2, output);
+    (*kernel)(input1, input2, output);
 //! [6]
 
 //! [7]
-    for (int index = 0; index < 2048; ++index) {
-        if (output[index] != 2048) {
-            fprintf(stderr, "Answer at index %d is %d, should be %d\n",
-                    index, output[index], 2048);
-            return 1;
+    for (int i=0; i<100000; ++i) {
+        for (int index = 0; index < 2048; ++index) {
+            if (output[index] != 2048) {
+                fprintf(stderr, "Answer at index %d is %d, should be %d\n",
+                        index, output[index], 2048);
+                return 1;
+            }
         }
     }
+
     printf("Answer is correct: %d\n", 2048);
 //! [7]
 

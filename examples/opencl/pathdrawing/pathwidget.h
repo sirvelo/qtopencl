@@ -58,8 +58,8 @@ protected:
 private:
     QCLContext context;
 
-    QCLProgram program;
-    QCLKernel fillRectWithColor;
+    QCLProgram* program;
+    QCLKernel* fillRectWithColor;
 
     QSize windowSize;
     QCLImage2D surfaceImage;
