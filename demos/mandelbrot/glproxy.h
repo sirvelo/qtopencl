@@ -59,7 +59,7 @@ QT_BEGIN_NAMESPACE
 
 // Copied from <QtOpenGL/private/qgl_p.h>.  Hopefully won't be
 // necessary in future versions of Qt.
-class Q_OPENGL_EXPORT QGLSignalProxy : public QObject
+class /*Q_OPENGL_EXPORT*/ QGLSignalProxy : public QObject
 {
     Q_OBJECT
 public:
