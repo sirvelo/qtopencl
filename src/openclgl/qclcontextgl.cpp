@@ -208,6 +208,14 @@ bool QCLContextGL::create(const QCLPlatform &platform)
         properties.append(cl_context_properties(glXGetCurrentContext()));
         hasSharing = true;
     }
+#elif defined(Q_OS_WIN)
+    if (khrSharing) {
+        properties.append(CL_GL_CONTEXT_KHR);
+        properties.append(cl_context_properties(wglGetCurrentContext()));
+        properties.append(CL_WGL_HDC_KHR);
+        properties.append(cl_context_properties(wglGetCurrentDC()));
+        hasSharing = true;
+    }
 #else
     // Needs to be ported to other platforms.
     if (khrSharing)
