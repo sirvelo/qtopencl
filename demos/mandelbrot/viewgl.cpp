@@ -186,15 +186,18 @@ void ViewGL::paintGL()
     glBindTexture(GL_TEXTURE_2D, 0);
 #endif
 
+#if 0
     if (timer->isActive()) {
         qreal fps = frameRate.fps();
         if (fps > 0.0f) {
             QPainter painter(this);
             QString str = QString::number(fps) + QLatin1String(" fps");
-            painter.setPen(Qt::white);
+            painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+            painter.setPen(qRgba(255,255,255,0));
             painter.drawText(rect(), str);
         }
     }
+#endif
 }
 
 void ViewGL::keyPressEvent(QKeyEvent *event)
