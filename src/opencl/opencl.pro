@@ -1,13 +1,17 @@
 TARGET     = QtOpenCL
 QT         += core-private gui-private concurrent
+TEMPLATE = lib
 
 win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x66000000
 solaris-cc*:QMAKE_CXXFLAGS_RELEASE -= -O2
 
 #QMAKE_DOCS = $$PWD/doc/qtopencl.qdocconf
-load(qt_module)
+#load(qt_module)
 
 win32 {
+#INTEL
+    INCLUDEPATH += 'C:/Program Files (x86)/Intel/OpenCL SDK/4.6/include'
+
     !isEmpty(QMAKE_INCDIR_OPENCL) {
         QMAKE_CXXFLAGS += -I$$QMAKE_INCDIR_OPENCL
     }
@@ -17,7 +21,7 @@ win32 {
     !isEmpty(QMAKE_LIBS_OPENCL) {
         LIBS += $$QMAKE_LIBS_OPENCL
     } else {
-        LIBS += -lOpenCL
+        LIBS += -L'C:/Program Files (x86)/Intel/OpenCL SDK/4.6/lib/x64' -lOpenCL
     }
 }
 

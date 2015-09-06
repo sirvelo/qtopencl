@@ -130,18 +130,18 @@ public:
          int width, int height, int depth, QCLMemoryObject::Access access,
          int bytesPerLine = 0, int bytesPerSlice = 0);
 
-    QCLProgram createProgramFromSourceCode(const QByteArray &sourceCode);
-    QCLProgram createProgramFromSourceFile(const QString &fileName);
-    QCLProgram createProgramFromBinaryCode(const QByteArray &binary);
-    QCLProgram createProgramFromBinaryFile(const QString &fileName);
-    QCLProgram createProgramFromBinaries
+    QCLProgram* createProgramFromSourceCode(const QByteArray &sourceCode);
+    QCLProgram* createProgramFromSourceFile(const QString &fileName);
+    QCLProgram* createProgramFromBinaryCode(const QByteArray &binary);
+    QCLProgram* createProgramFromBinaryFile(const QString &fileName);
+    QCLProgram* createProgramFromBinaries
         (const QList<QCLDevice> &devices, const QList<QByteArray> &binaries);
 
-    QCLProgram buildProgramFromSourceCode(const QByteArray &sourceCode);
-    QCLProgram buildProgramFromSourceFile(const QString &fileName);
-    QCLProgram buildProgramFromBinaryCode(const QByteArray &binary);
-    QCLProgram buildProgramFromBinaryFile(const QString &fileName);
-    QCLProgram buildProgramFromBinaries
+    QCLProgram* buildProgramFromSourceCode(const QByteArray &sourceCode);
+    QCLProgram* buildProgramFromSourceFile(const QString &fileName);
+    QCLProgram* buildProgramFromBinaryCode(const QByteArray &binary);
+    QCLProgram* buildProgramFromBinaryFile(const QString &fileName);
+    QCLProgram* buildProgramFromBinaries
         (const QList<QCLDevice> &devices, const QList<QByteArray> &binaries);
 
     QList<QCLImageFormat> supportedImage2DFormats(cl_mem_flags flags) const;

@@ -1,13 +1,16 @@
 TARGET     = QtOpenCLGL
-QT         += core-private gui-private concurrent opengl opencl
+QT         += core-private gui-private concurrent opengl
+TEMPLATE = lib
 
 win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x66000000
-solaris-cc*:QMAKE_CXXFLAGS_RELEASE -= -O2
+solaris-cc*:QMAKE_CXXFLAGS_RELEASE -= -O2 opencl
 
 #QMAKE_DOCS = $$PWD/doc/qtopenclgl.qdocconf
-load(qt_module)
+#load(qt_module)
 
 win32 {
+    INCLUDEPATH += 'C:/Program Files (x86)/Intel/OpenCL SDK/4.6/include' \
+            'D:/QtOpenCL/include'
     !isEmpty(QMAKE_INCDIR_OPENCL) {
         QMAKE_CXXFLAGS += -I$$QMAKE_INCDIR_OPENCL
     }
@@ -17,7 +20,12 @@ win32 {
     !isEmpty(QMAKE_LIBS_OPENCL) {
         LIBS += $$QMAKE_LIBS_OPENCL
     } else {
-        LIBS += -lOpenCL
+        CONFIG(debug, debug | release) {
+            LIBS += -L'C:/Program Files (x86)/Intel/OpenCL SDK/4.6/lib/x64' -L'D:/QtOpenCL/debug/lib' -lOpenCL -lQtOpenCL -lQtOpenCLGL
+        }
+        CONFIG(release, debug | release) {
+            LIBS += -L'C:/Program Files (x86)/Intel/OpenCL SDK/4.6/lib/x64' -L'D:/QtOpenCL/release/lib' -lOpenCL -lQtOpenCL -lQtOpenCLGL
+        }
     }
 }
 
@@ -32,6 +40,7 @@ no_cl_gl {
 INCLUDEPATH += $$PWD/../opencl
 
 HEADERS += \
+    qclcontextgl.h \
     qclcontextgl.h
 
 SOURCES += \

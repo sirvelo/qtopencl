@@ -61,7 +61,7 @@ class Q_CLGL_EXPORT QCLContextGL : public QCLContext
 {
 public:
     QCLContextGL();
-    ~QCLContextGL();
+    virtual ~QCLContextGL();
 
     bool create(const QCLPlatform &platform = QCLPlatform());
     void release();

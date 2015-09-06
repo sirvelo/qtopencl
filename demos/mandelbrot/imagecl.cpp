@@ -54,7 +54,7 @@ public:
 
     QCLContext *context;
     QCLContextGL *glContext;
-    QCLProgram program;
+    QCLProgram* program;
     QCLKernel* mandelbrot;
 };
 
@@ -78,7 +78,7 @@ void ImageCLContext::init(bool useGL, int wid, int ht)
 
     program = context->buildProgramFromSourceFile
         (QLatin1String(":/mandelbrot.cl"));
-    mandelbrot = program.createKernel("mandelbrot");
+    mandelbrot = program->createKernel("mandelbrot");
     mandelbrot->setGlobalWorkSize(wid, ht);
     mandelbrot->setLocalWorkSize(mandelbrot->bestLocalWorkSizeImage2D());
 }

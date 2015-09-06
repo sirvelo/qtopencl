@@ -1015,7 +1015,7 @@ QCLImage3D QCLContext::createImage3DCopy
 
     \sa createProgramFromSourceFile(), buildProgramFromSourceCode()
 */
-QCLProgram QCLContext::createProgramFromSourceCode(const QByteArray &sourceCode)
+QCLProgram* QCLContext::createProgramFromSourceCode(const QByteArray &sourceCode)
 {
     Q_D(QCLContext);
     Q_ASSERT(!sourceCode.isEmpty());
@@ -1026,9 +1026,9 @@ QCLProgram QCLContext::createProgramFromSourceCode(const QByteArray &sourceCode)
         (d->id, 1, &code, &length, &error);
     reportError("QCLContext::createProgramFromSourceCode:", error);
     if (prog)
-        return QCLProgram(this, prog);
+        return new QCLProgram(this, prog);
     else
-        return QCLProgram();
+        return new QCLProgram();
 }
 
 /*!
@@ -1037,19 +1037,19 @@ QCLProgram QCLContext::createProgramFromSourceCode(const QByteArray &sourceCode)
 
     \sa createProgramFromSourceCode(), buildProgramFromSourceFile()
 */
-QCLProgram QCLContext::createProgramFromSourceFile(const QString &fileName)
+QCLProgram* QCLContext::createProgramFromSourceFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
         qWarning() << "QCLContext::createProgramFromSourceFile: Unable to open file" << fileName;
-        return QCLProgram();
+        return new QCLProgram();
     }
     qint64 size = file.size();
     uchar *data;
     if (size > 0 && size <= 0x7fffffff && (data = file.map(0, size)) != 0) {
         QByteArray array = QByteArray::fromRawData
             (reinterpret_cast<char *>(data), int(size));
-        QCLProgram program = createProgramFromSourceCode(array);
+        QCLProgram* program = createProgramFromSourceCode(array);
         file.unmap(data);
         return program;
     }
@@ -1065,7 +1065,7 @@ QCLProgram QCLContext::createProgramFromSourceFile(const QString &fileName)
 
     \sa createProgramFromBinaryFile(), createProgramFromBinaries()
 */
-QCLProgram QCLContext::createProgramFromBinaryCode(const QByteArray &binary)
+QCLProgram* QCLContext::createProgramFromBinaryCode(const QByteArray &binary)
 {
     Q_D(QCLContext);
     Q_ASSERT(!binary.isEmpty());
@@ -1077,9 +1077,9 @@ QCLProgram QCLContext::createProgramFromBinaryCode(const QByteArray &binary)
         (d->id, 1, &device, &length, &code, 0, &error);
     reportError("QCLContext::createProgramFromBinaryCode:", error);
     if (prog)
-        return QCLProgram(this, prog);
+        return new QCLProgram(this, prog);
     else
-        return QCLProgram();
+        return new QCLProgram();
 }
 
 /*!
@@ -1088,19 +1088,19 @@ QCLProgram QCLContext::createProgramFromBinaryCode(const QByteArray &binary)
 
     \sa createProgramFromBinaryCode(), createProgramFromBinaries()
 */
-QCLProgram QCLContext::createProgramFromBinaryFile(const QString &fileName)
+QCLProgram* QCLContext::createProgramFromBinaryFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
         qWarning() << "QCLContext::createProgramFromBinaryFile: Unable to open file" << fileName;
-        return QCLProgram();
+        return new QCLProgram();
     }
     qint64 size = file.size();
     uchar *data;
     if (size > 0 && size <= 0x7fffffff && (data = file.map(0, size)) != 0) {
         QByteArray array = QByteArray::fromRawData
             (reinterpret_cast<char *>(data), int(size));
-        QCLProgram program = createProgramFromBinaryCode(array);
+        QCLProgram* program = createProgramFromBinaryCode(array);
         file.unmap(data);
         return program;
     }
@@ -1115,13 +1115,13 @@ QCLProgram QCLContext::createProgramFromBinaryFile(const QString &fileName)
 
     \sa createProgramFromBinaryCode(), createProgramFromBinaryFile()
 */
-QCLProgram QCLContext::createProgramFromBinaries
+QCLProgram* QCLContext::createProgramFromBinaries
     (const QList<QCLDevice> &devices, const QList<QByteArray> &binaries)
 {
     Q_D(QCLContext);
     if (devices.size() != binaries.size() || devices.isEmpty()) {
         reportError("QCLContext::createProgramFromBinaries:", CL_INVALID_VALUE);
-        return QCLProgram();
+        return new QCLProgram();
     }
     QVarLengthArray<cl_device_id> devs;
     QVarLengthArray<const uchar *> bins;
@@ -1137,9 +1137,9 @@ QCLProgram QCLContext::createProgramFromBinaries
         (d->id, devs.size(), devs.data(), lens.data(), bins.data(), 0, &error);
     reportError("QCLContext::createProgramFromBinaries:", error);
     if (prog)
-        return QCLProgram(this, prog);
+        return new QCLProgram(this, prog);
     else
-        return QCLProgram();
+        return new QCLProgram();
 }
 
 /*!
@@ -1149,12 +1149,12 @@ QCLProgram QCLContext::createProgramFromBinaries
 
     \sa createProgramFromSourceCode(), buildProgramFromSourceFile()
 */
-QCLProgram QCLContext::buildProgramFromSourceCode(const QByteArray &sourceCode)
+QCLProgram* QCLContext::buildProgramFromSourceCode(const QByteArray &sourceCode)
 {
-    QCLProgram program = createProgramFromSourceCode(sourceCode);
-    if (program.isNull() || program.build())
+    QCLProgram* program = createProgramFromSourceCode(sourceCode);
+    if (program->isNull() || program->build())
         return program;
-    return QCLProgram();
+    return new QCLProgram();
 }
 
 /*!
@@ -1164,12 +1164,12 @@ QCLProgram QCLContext::buildProgramFromSourceCode(const QByteArray &sourceCode)
 
     \sa createProgramFromSourceFile(), buildProgramFromSourceCode()
 */
-QCLProgram QCLContext::buildProgramFromSourceFile(const QString &fileName)
+QCLProgram* QCLContext::buildProgramFromSourceFile(const QString &fileName)
 {
-    QCLProgram program = createProgramFromSourceFile(fileName);
-    if (program.isNull() || program.build())
+    QCLProgram* program = createProgramFromSourceFile(fileName);
+    if (program->isNull() || program->build())
         return program;
-    return QCLProgram();
+    return new QCLProgram();
 }
 
 /*!
@@ -1183,12 +1183,12 @@ QCLProgram QCLContext::buildProgramFromSourceFile(const QString &fileName)
     \sa createProgramFromBinaryCode(), buildProgramFromBinaryFile()
     \sa buildProgramFromBinaries()
 */
-QCLProgram QCLContext::buildProgramFromBinaryCode(const QByteArray &binary)
+QCLProgram* QCLContext::buildProgramFromBinaryCode(const QByteArray &binary)
 {
-    QCLProgram program = createProgramFromBinaryCode(binary);
-    if (program.isNull() || program.build())
+    QCLProgram* program = createProgramFromBinaryCode(binary);
+    if (program->isNull() || program->build())
         return program;
-    return QCLProgram();
+    return new QCLProgram();
 }
 
 /*!
@@ -1198,12 +1198,12 @@ QCLProgram QCLContext::buildProgramFromBinaryCode(const QByteArray &binary)
 
     \sa createProgramFromBinaryFile(), buildProgramFromBinaryCode()
 */
-QCLProgram QCLContext::buildProgramFromBinaryFile(const QString &fileName)
+QCLProgram* QCLContext::buildProgramFromBinaryFile(const QString &fileName)
 {
-    QCLProgram program = createProgramFromBinaryFile(fileName);
-    if (program.isNull() || program.build())
+    QCLProgram* program = createProgramFromBinaryFile(fileName);
+    if (program->isNull() || program->build())
         return program;
-    return QCLProgram();
+    return new QCLProgram();
 }
 
 /*!
@@ -1214,13 +1214,13 @@ QCLProgram QCLContext::buildProgramFromBinaryFile(const QString &fileName)
 
     \sa createProgramFromBinaries(), buildProgramFromBinaryCode()
 */
-QCLProgram QCLContext::buildProgramFromBinaries
+QCLProgram* QCLContext::buildProgramFromBinaries
     (const QList<QCLDevice> &devices, const QList<QByteArray> &binaries)
 {
-    QCLProgram program = createProgramFromBinaries(devices, binaries);
-    if (program.isNull() || program.build())
+    QCLProgram* program = createProgramFromBinaries(devices, binaries);
+    if (program->isNull() || program->build())
         return program;
-    return QCLProgram();
+    return new QCLProgram();
 }
 
 static QList<QCLImageFormat> qt_cl_supportedImageFormats
