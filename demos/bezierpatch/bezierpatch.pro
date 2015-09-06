@@ -1,6 +1,9 @@
 TEMPLATE = app
 TARGET = bezierpatch
 
+VPATH += ../mandelbrot
+INCLUDEPATH += ../mandelbrot
+
 win32 {
     INCLUDEPATH += 'C:/Program Files (x86)/Intel/OpenCL SDK/4.6/include' \
             'D:/QtOpenCL/include'
@@ -33,12 +36,10 @@ SOURCES += main.cpp \
            beziermainwindow.cpp \
            bezierwidget.cpp \
            qglcamera.cpp \
-           framerate.cpp \
-    framerate.cpp
+           framerate.cpp
 HEADERS += bezierwidget.h \
            beziermainwindow.h \
            qglcamera.h \
-           framerate.h \
-    framerate.h
+           framerate.h
 RESOURCES += bezierpatch.qrc
 FORMS += beziermainwindow.ui
