@@ -57,8 +57,8 @@ ColorizeWidget::ColorizeWidget(QWidget *parent)
     dstImageBuffer = context.createImage2DDevice(dstImage.format(), dstImage.size(), QCLMemoryObject::WriteOnly);
 
     colorize = program->createKernel("colorize");
-    colorize->setGlobalWorkSize(img.size());
-    colorize->setLocalWorkSize(colorize->bestLocalWorkSizeImage2D());
+    colorize.setGlobalWorkSize(img.size());
+    colorize.setLocalWorkSize(colorize.bestLocalWorkSizeImage2D());
 }
 
 ColorizeWidget::~ColorizeWidget()
@@ -67,7 +67,7 @@ ColorizeWidget::~ColorizeWidget()
 
 void ColorizeWidget::paintEvent(QPaintEvent *)
 {
-    (*colorize)(srcImageBuffer, dstImageBuffer, color);
+    colorize(srcImageBuffer, dstImageBuffer, color);
     dstImageBuffer.read(&dstImage);
     QPainter painter(this);
     painter.drawImage(0, 0, dstImage);

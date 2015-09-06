@@ -59,8 +59,8 @@ private:
     QCLContext context;
 
     QCLProgram* program;
-    QCLKernel* fillRectWithColor;
-    QCLKernel* drawImageKernel;
+    QCLKernel fillRectWithColor;
+    QCLKernel drawImageKernel;
 
     QCLImage2D flower;
     QCLImage2D bg1;

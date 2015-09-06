@@ -55,13 +55,13 @@ public:
     QCLContext *context;
     QCLContextGL *glContext;
     QCLProgram* program;
-    QCLKernel* mandelbrot;
+    QCLKernel mandelbrot;
 };
 
 void ImageCLContext::init(bool useGL, int wid, int ht)
 {
     if (context) {
-        mandelbrot->setGlobalWorkSize(wid, ht);
+        mandelbrot.setGlobalWorkSize(wid, ht);
         return;
     }
 
@@ -79,8 +79,8 @@ void ImageCLContext::init(bool useGL, int wid, int ht)
     program = context->buildProgramFromSourceFile
         (QLatin1String(":/mandelbrot.cl"));
     mandelbrot = program->createKernel("mandelbrot");
-    mandelbrot->setGlobalWorkSize(wid, ht);
-    mandelbrot->setLocalWorkSize(mandelbrot->bestLocalWorkSizeImage2D());
+    mandelbrot.setGlobalWorkSize(wid, ht);
+    mandelbrot.setLocalWorkSize(mandelbrot.bestLocalWorkSizeImage2D());
 }
 
 ImageCLContext::~ImageCLContext()
@@ -150,7 +150,7 @@ void ImageCL::generate(int maxIterations, const Palette &palette)
     init();
 
     ImageCLContext *ctx = image_context();
-    QCLKernel& mandelbrot = *(ctx->mandelbrot);
+    QCLKernel mandelbrot = ctx->mandelbrot;
 
     // Upload the color table into a buffer in the device.
     if (colorBuffer.isNull() || lastIterations != maxIterations) {

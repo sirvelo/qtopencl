@@ -65,14 +65,14 @@ int main(int, char **)
 
 //! [4]
     QCLProgram* program = context.buildProgramFromSourceFile(":/vectoradd.cl");
-    QCLKernel* kernel = program->createKernel("vectorAdd");
+    QCLKernel kernel = program->createKernel("vectorAdd");
 //! [4]
 
 //! [5]
-    kernel->setGlobalWorkSize(2048);
+    kernel.setGlobalWorkSize(2048);
 //! [5]
 //! [6]
-    (*kernel)(input1, input2, output);
+    kernel(input1, input2, output);
 //! [6]
 
 //! [7]

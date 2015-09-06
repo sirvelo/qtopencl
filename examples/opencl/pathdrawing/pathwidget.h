@@ -59,7 +59,7 @@ private:
     QCLContext context;
 
     QCLProgram* program;
-    QCLKernel* fillRectWithColor;
+    QCLKernel fillRectWithColor;
 
     QSize windowSize;
     QCLImage2D surfaceImage;

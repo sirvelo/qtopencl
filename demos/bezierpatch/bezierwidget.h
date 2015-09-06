@@ -78,7 +78,7 @@ private:
     QCLContextGL context;
 
     QCLProgram* program;
-    QCLKernel* evaluateBezier;
+    QCLKernel evaluateBezier;
     QCLBuffer positionBuffer;
     QCLBuffer texCoordBuffer;
 

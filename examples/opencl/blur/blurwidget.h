@@ -60,8 +60,8 @@ private slots:
 private:
     QCLContext context;
     QCLProgram* program;
-    QCLKernel* hgaussian;
-    QCLKernel* vgaussian;
+    QCLKernel hgaussian;
+    QCLKernel vgaussian;
     QImage dstImage;
     QCLImage2D srcImageBuffer;
     QCLImage2D dstImageBuffer;

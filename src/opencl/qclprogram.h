@@ -80,11 +80,11 @@ public:
     QByteArray sourceCode() const;
     QList<QByteArray> binaries() const;
 
-    QCLKernel* createKernel(const char *name) const;
-    QCLKernel* createKernel(const QByteArray &name) const;
-    QCLKernel* createKernel(const QString &name) const;
+    QCLKernel createKernel(const char *name) const;
+    QCLKernel createKernel(const QByteArray &name) const;
+    QCLKernel createKernel(const QString &name) const;
 
-    QList<QCLKernel*> createKernels() const;
+    QList<QCLKernel> createKernels() const;
 
     static void unloadCompiler();
 
